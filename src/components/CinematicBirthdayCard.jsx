@@ -1,6 +1,7 @@
 import { Heart, Sparkles, Star, Gift } from 'lucide-react'
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useMemo } from 'react'
+import confetti from 'canvas-confetti'
 
 export default function CinematicBirthdayCard() {
   const [step, setStep] = useState(0)
@@ -22,6 +23,12 @@ export default function CinematicBirthdayCard() {
   const openCard = () => {
     if (step > 0) return
     setStep(1)
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#F87171', '#FBBF24', '#60A5FA'],
+    })
     setTimeout(() => setStep(2), 1000)
     setTimeout(() => setShowHearts(true), 1500)
   }
@@ -197,9 +204,14 @@ export default function CinematicBirthdayCard() {
             exit={{ opacity: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1F2937' }}>
+            <motion.h1
+              style={{ fontSize: '24px', fontWeight: 'bold', color: '#1F2937' }}
+              initial={{ width: 0 }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 2, delay: 1 }}
+            >
               Happy 20th Birthday!
-            </h1>
+            </motion.h1>
             <p style={{ color: '#6B7280', marginTop: '8px' }}>To someone truly extraordinary</p>
 
             <div style={{ marginTop: '20px', fontSize: '16px', lineHeight: '1.6' }}>
@@ -209,11 +221,24 @@ export default function CinematicBirthdayCard() {
                 "This year will bring new adventures, challenges, and triumphs. I'll be there cheering you on every step of the way.",
                 "May your 20th year be filled with joy, love, and dreams that take flight like birthday balloons."
               ].map((text, i) => (
-                <p key={i} style={{ marginBottom: '12px' }}>{text}</p>
+                <motion.p
+                  key={i}
+                  style={{ marginBottom: '12px' }}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 1.5 + i * 0.3 }}
+                >
+                  {text}
+                </motion.p>
               ))}
-              <p style={{ fontWeight: 'bold', fontStyle: 'italic', marginTop: '16px' }}>
+              <motion.p
+                style={{ fontWeight: 'bold', fontStyle: 'italic', marginTop: '16px' }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 3 }}
+              >
                 "You make my world more beautiful just by being in it."
-              </p>
+              </motion.p>
             </div>
           </motion.div>
         )}
