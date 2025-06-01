@@ -6,6 +6,7 @@ import confetti from 'canvas-confetti'
 export default function CinematicBirthdayCard() {
   const [step, setStep] = useState(0)
   const [showHearts, setShowHearts] = useState(false)
+
   const progress = useMotionValue(0)
   const rotateX = useTransform(progress, [0, 100], [0, 180])
   const borderRadius = useTransform(progress, [0, 30, 100], [16, 8, 16])
@@ -34,28 +35,24 @@ export default function CinematicBirthdayCard() {
   }
 
   const ambientParticles = useMemo(() => (
-    [...Array(30)].map(() => {
-      const width = Math.random() * 10 + 2
-      const height = Math.random() * 10 + 2
-      return {
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        width,
-        height,
-        opacity: Math.random() * 0.1 + 0.05,
-        duration: Math.random() * 10 + 10,
-        delay: Math.random() * 5
-      }
-    })
+    [...Array(30)].map(() => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      width: Math.random() * 10 + 2,
+      height: Math.random() * 10 + 2,
+      opacity: Math.random() * 0.1 + 0.05,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }))
   ), [])
 
-  const floatingElements = useMemo(() => ([
+  const floatingElements = useMemo(() => [
     { icon: <Star size={20} />, delay: 0 },
     { icon: <Gift size={20} />, delay: 0.4 },
     { icon: <Sparkles size={16} />, delay: 0.6 }
-  ]), [])
+  ], [])
 
-  // Container style with full-screen centering
+  // Full-screen centered container
   const containerStyle = {
     position: 'relative',
     width: '100%',
@@ -81,6 +78,7 @@ export default function CinematicBirthdayCard() {
     width: '400px',
     textAlign: 'center',
     boxSizing: 'border-box',
+    zIndex: 2,
   }
 
   const buttonStyle = {
@@ -111,7 +109,7 @@ export default function CinematicBirthdayCard() {
 
   return (
     <div style={containerStyle}>
-      {/* Ambient Particles */}
+      {/* Ambient background particles */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         {ambientParticles.map((p, i) => (
           <motion.div
@@ -141,7 +139,7 @@ export default function CinematicBirthdayCard() {
       <motion.div
         style={{
           rotateX,
-          borderRadius: borderRadius.get() + 'px',
+          borderRadius: `${borderRadius.get()}px`,
           transformStyle: 'preserve-3d',
           zIndex: 1,
           width: '100%',
@@ -183,7 +181,7 @@ export default function CinematicBirthdayCard() {
         </motion.div>
       </motion.div>
 
-      {/* Birthday Message Slide-In */}
+      {/* Message Panel Slide-In */}
       <AnimatePresence>
         {step === 2 && (
           <motion.div
@@ -197,7 +195,7 @@ export default function CinematicBirthdayCard() {
               width: '400px',
               textAlign: 'center',
               color: '#374151',
-              zIndex: 1,
+              zIndex: 2,
               position: 'relative',
               marginTop: '24px',
             }}
@@ -246,7 +244,7 @@ export default function CinematicBirthdayCard() {
         )}
       </AnimatePresence>
 
-      {/* Floating Hearts/Icons */}
+      {/* Floating Hearts / Icons */}
       {showHearts && (
         <div style={heartsContainerStyle}>
           {[...Array(20)].map((_, i) => (
