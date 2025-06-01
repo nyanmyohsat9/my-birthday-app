@@ -1,8 +1,5 @@
-import React from 'react'
 import CinematicBirthdayCard from './components/CinematicBirthdayCard'
 
-function App() {
+export default function App() {
   return <CinematicBirthdayCard />
 }
-
-export default App
