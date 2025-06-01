@@ -10,9 +10,9 @@ export default function CinematicBirthdayCard() {
   const rotateX = useTransform(progress, [0, 100], [0, 180])
   const borderRadius = useTransform(progress, [0, 30, 100], [16, 8, 16])
 
-  // Play background music on load
+  // ✅ Use a public audio URL to avoid file path issues
   useEffect(() => {
-    const audio = new Audio('/audio/first-date-frad.mp3')
+    const audio = new Audio('https://www.soundjay.com/human/sounds/heartbeat-04.mp3') 
     audio.loop = true
     audio.volume = 0.3
     audio.play().catch(() => {
@@ -52,29 +52,76 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={20} />, delay: 0.4 },
   ], [])
 
+  // ✅ Global reset to ensure full viewport and no browser defaults
+  const globalReset = (
+    <style>
+      {`
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          font-family: 'Segoe UI', sans-serif;
+          background: white;
+        }
+      `}
+    </style>
+  )
+
+  const containerStyle = {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
+    color: '#374151',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden'
+  }
+
+  const cardStyle = {
+    backgroundColor: '#fff',
+    borderRadius: '16px',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+    border: '1px solid #D1D5DB',
+    padding: '24px',
+    maxWidth: '400px',
+    textAlign: 'center',
+    boxSizing: 'border-box',
+    zIndex: 2,
+  }
+
+  const buttonStyle = {
+    backgroundColor: '#F3F4F6',
+    border: '1px solid #D1D5DB',
+    color: '#374151',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+    padding: '12px 24px',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginTop: '16px',
+    width: '100%',
+    maxWidth: '250px',
+  }
+
+  const heartsContainerStyle = {
+    position: 'fixed',
+    inset: 0,
+    pointerEvents: 'none',
+    overflow: 'hidden',
+    zIndex: 1000,
+  }
+
   return (
     <>
-      {/* Global Reset */}
-      <style>
-        {`
-          html, body, #root {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          }
-        `}
-      </style>
-
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#fff',
-        color: '#374151',
-        overflow: 'hidden'
-      }}>
+      {globalReset}
+      <div style={containerStyle}>
         {/* Ambient Particles */}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
           {ambientParticles.map((p, i) => (
@@ -101,7 +148,7 @@ export default function CinematicBirthdayCard() {
           ))}
         </div>
 
-        {/* Card Container */}
+        {/* Card Flip Animation */}
         <motion.div
           style={{
             position: 'absolute',
@@ -114,25 +161,12 @@ export default function CinematicBirthdayCard() {
             transformStyle: 'preserve-3d',
             zIndex: 1,
             width: '100%',
-            maxWidth: '400px'
+            maxWidth: '400px',
           }}
           animate={step === 1 ? { scale: 1.02 } : { scale: 1 }}
           transition={{ type: 'spring', damping: 20 }}
         >
-          <motion.div
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '16px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-              border: '1px solid #D1D5DB',
-              padding: '24px',
-              width: '100%',
-              textAlign: 'center',
-              boxSizing: 'border-box',
-              zIndex: 2
-            }}
-            animate={{ opacity: step === 2 ? 0 : 1 }}
-          >
+          <motion.div style={cardStyle} animate={{ opacity: step === 2 ? 0 : 1 }}>
             <div style={{ marginBottom: '20px' }}>
               <Heart size={48} color="#4B5563" />
             </div>
@@ -153,22 +187,7 @@ export default function CinematicBirthdayCard() {
               A special message awaits inside...
             </motion.p>
             <motion.button
-              style={{
-                backgroundColor: '#F3F4F6',
-                border: '1px solid #D1D5DB',
-                color: '#374151',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                padding: '12px 24px',
-                borderRadius: '20px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                width: '100%',
-                maxWidth: '250px'
-              }}
+              style={buttonStyle}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.9 }}
@@ -180,7 +199,7 @@ export default function CinematicBirthdayCard() {
           </motion.div>
         </motion.div>
 
-        {/* Message Panel */}
+        {/* Message Panel Slide-In */}
         <AnimatePresence>
           {step === 2 && (
             <motion.div
@@ -248,13 +267,7 @@ export default function CinematicBirthdayCard() {
 
         {/* Floating Hearts / Icons */}
         {showHearts && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            pointerEvents: 'none',
-            overflow: 'hidden',
-            zIndex: 1000,
-          }}>
+          <div style={heartsContainerStyle}>
             {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
