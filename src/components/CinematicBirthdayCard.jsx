@@ -1,7 +1,6 @@
-import { Heart, Sparkles, Star, Gift } from 'lucide-react'
+import { Heart, Sparkles } from 'lucide-react'
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useMemo } from 'react'
-import confetti from 'canvas-confetti'
 
 export default function CinematicBirthdayCard() {
   const [step, setStep] = useState(0)
@@ -11,27 +10,21 @@ export default function CinematicBirthdayCard() {
   const rotateX = useTransform(progress, [0, 100], [0, 180])
   const borderRadius = useTransform(progress, [0, 30, 100], [16, 8, 16])
 
-  // Background music with tab visibility control
+  // Play background music on load
   useEffect(() => {
     const audio = new Audio('/audio/first-date-frad.mp3')
     audio.loop = true
     audio.volume = 0.3
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        audio.pause()
-      } else {
+    audio.play().catch(() => {
+      // If autoplay is blocked, try playing on first click
+      const playAudio = () => {
         audio.play()
+        document.removeEventListener('click', playAudio)
       }
-    }
+      document.addEventListener('click', playAudio)
+    })
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    audio.play().catch(() => {})
-
-    return () => {
-      audio.pause()
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
+    return () => audio.pause()
   }, [])
 
   const confettiColors = ['rgba(255,255,255,0.9)', 'rgba(220,220,220,0.8)', 'rgba(240,240,240,0.7)']
@@ -39,12 +32,6 @@ export default function CinematicBirthdayCard() {
   const openCard = () => {
     if (step > 0) return
     setStep(1)
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#F87171', '#FBBF24', '#60A5FA'],
-    })
     setTimeout(() => setStep(2), 1000)
     setTimeout(() => setShowHearts(true), 1500)
   }
@@ -62,16 +49,15 @@ export default function CinematicBirthdayCard() {
   ), [])
 
   const floatingElements = useMemo(() => [
-    { icon: <Star size={20} />, delay: 0 },
-    { icon: <Gift size={20} />, delay: 0.4 },
-    { icon: <Sparkles size={16} />, delay: 0.6 }
+    { icon: <Heart size={20} />, delay: 0 },
+    { icon: <Sparkles size={20} />, delay: 0.4 },
   ], [])
 
-  // Centered container style
+  // ✅ Centered container style
   const containerStyle = {
     position: 'relative',
-    width: '100%',
-    minHeight: '100vh',
+    width: '100vw',
+    height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
