@@ -14,7 +14,6 @@ export default function CinematicBirthdayCard() {
     audio.loop = true
     audio.volume = 0.3
     audio.play()
-
     return () => audio.pause()
   }, [])
 
@@ -51,44 +50,41 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles width={16} height={16} />, delay: 0.6 }
   ]), [])
 
-  // Style objects
+  // Container style
   const containerStyle = {
     position: 'relative',
     minHeight: '100vh',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     overflow: 'hidden',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-    fontFamily: 'system-ui, sans-serif',
-    color: '#4B5563', // gray-700 equivalent
+    padding: 24,
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    color: '#374151',
   }
 
-  const cardWrapperStyle = {
-    perspective: 1000,
-    borderRadius: borderRadius.get() + 'px',
-    transformStyle: 'preserve-3d',
-  }
-
+  // Card style
   const cardStyle = {
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderRadius: 16,
     boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-    border: '1px solid #D1D5DB', // gray-300
+    border: '1px solid #D1D5DB',
     overflow: 'hidden',
     padding: 32,
     maxWidth: 480,
-    margin: 'auto',
+    width: '100%',
     textAlign: 'center',
   }
 
+  // Button style
   const buttonStyle = {
-    backgroundColor: '#F3F4F6', // gray-100
+    backgroundColor: '#F3F4F6',
     border: '1px solid #D1D5DB',
-    color: '#374151', // gray-800
+    color: '#374151',
     boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    padding: '24px 64px',
+    padding: '20px 48px',
     borderRadius: 24,
     cursor: 'pointer',
     fontWeight: 'bold',
@@ -97,11 +93,22 @@ export default function CinematicBirthdayCard() {
     alignItems: 'center',
     gap: 8,
     userSelect: 'none',
+    marginTop: 16,
+  }
+
+  // Floating hearts container style
+  const heartsContainerStyle = {
+    position: 'fixed',
+    inset: 0,
+    pointerEvents: 'none',
+    overflow: 'hidden',
+    zIndex: 1000,
   }
 
   return (
     <div style={containerStyle}>
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {/* Ambient particles */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
         {ambientParticles.map((p, i) => (
           <motion.div
             key={i}
@@ -127,15 +134,13 @@ export default function CinematicBirthdayCard() {
         ))}
       </div>
 
+      {/* Card */}
       <motion.div
-        style={{ ...cardWrapperStyle, rotateX }}
+        style={{ rotateX, borderRadius: borderRadius.get() + 'px', transformStyle: 'preserve-3d', marginBottom: 24, zIndex: 1 }}
         animate={step === 1 ? { scale: 1.02 } : { scale: 1 }}
         transition={{ type: 'spring', damping: 20 }}
       >
-        <motion.div
-          style={cardStyle}
-          animate={{ opacity: step === 2 ? 0 : 1 }}
-        >
+        <motion.div style={cardStyle} animate={{ opacity: step === 2 ? 0 : 1 }}>
           <div style={{ marginBottom: 24 }}>
             <Heart size={48} color="#4B5563" />
           </div>
@@ -160,10 +165,7 @@ export default function CinematicBirthdayCard() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.9 }}
           >
-            <button
-              style={buttonStyle}
-              onClick={openCard}
-            >
+            <button style={buttonStyle} onClick={openCard}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Sparkles size={20} />
                 Open Card
@@ -173,20 +175,21 @@ export default function CinematicBirthdayCard() {
         </motion.div>
       </motion.div>
 
+      {/* Message after opening */}
       <AnimatePresence>
         {step === 2 && (
           <motion.div
             style={{
-              marginTop: 32,
-              backgroundColor: 'white',
+              backgroundColor: '#fff',
               borderRadius: 16,
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-              border: '1px solid #E5E7EB', // gray-200
+              border: '1px solid #E5E7EB',
               padding: 32,
               maxWidth: 480,
-              margin: 'auto',
+              width: '100%',
               textAlign: 'center',
               color: '#374151',
+              zIndex: 1,
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,8 +201,8 @@ export default function CinematicBirthdayCard() {
             </h1>
             <p style={{ color: '#6B7280', marginTop: 8 }}>To someone truly extraordinary</p>
 
-            <div style={{ marginTop: 24, fontSize: 18, lineHeight: 1.6, color: '#374151' }}>
-              <p style={{ marginBottom: 24, fontWeight: '600', fontSize: 20, fontStyle: 'italic' }}>
+            <div style={{ marginTop: 24, fontSize: 18, lineHeight: 1.6 }}>
+              <p style={{ marginBottom: 24, fontWeight: '600', fontStyle: 'italic' }}>
                 My dearest love,
               </p>
               {[
@@ -216,63 +219,3 @@ export default function CinematicBirthdayCard() {
                 "You make my world more beautiful just by being in it."
               </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {showHearts && (
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              style={{
-                position: 'absolute',
-                color: confettiColors[i % confettiColors.length],
-                top: window.innerHeight + 100,
-                left: Math.random() * window.innerWidth,
-                rotate: Math.random() * 360,
-                scale: 0,
-                opacity: 0,
-              }}
-              initial={{
-                y: window.innerHeight + 100,
-                rotate: Math.random() * 360,
-                scale: 0,
-                opacity: 0,
-              }}
-              animate={{
-                y: -100,
-                x: Math.random() * window.innerWidth - window.innerWidth / 2,
-                rotate: Math.random() * 360,
-                scale: [0, 1, 1, 0],
-                opacity: [0, 1, 1, 0],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 3,
-                repeat: Infinity,
-                repeatDelay: Math.random() * 5,
-                ease: 'linear',
-              }}
-            >
-              {floatingElements[i % floatingElements.length].icon}
-            </motion.div>
-          ))}
-        </div>
-      )}
-
-      {step === 2 && (
-        <motion.div
-          style={{ marginTop: 24, textAlign: 'center', color: '#4B5563' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-        >
-          <div style={{ display: 'inline-block', borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
-            <p style={{ fontStyle: 'italic' }}>Forever yours,</p>
-            <p style={{ marginTop: 8, fontWeight: '600' }}>[Your Name]</p>
-          </div>
-        </motion.div>
-      )}
-    </div>
-  )
-}
