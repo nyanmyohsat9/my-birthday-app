@@ -48,19 +48,22 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={16} />, delay: 0.6 }
   ]), [])
 
-  // 💫 Center the card perfectly
+  // Perfectly centered container
   const containerStyle = {
-    position: 'relative',
+    position: 'absolute',
+    top: 0,
+    left: 0,
     width: '100%',
-    minHeight: '100vh',
+    height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: '#374151',
-    padding: '20px',
-    boxSizing: 'border-box',
+    padding: 0,
+    margin: 0,
+    overflow: 'hidden',
   }
 
   const cardStyle = {
@@ -103,7 +106,6 @@ export default function CinematicBirthdayCard() {
 
   return (
     <div style={containerStyle}>
-      {/* Background particles */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         {ambientParticles.map((p, i) => (
           <motion.div
@@ -129,7 +131,6 @@ export default function CinematicBirthdayCard() {
         ))}
       </div>
 
-      {/* Birthday Card */}
       <motion.div
         style={{
           rotateX,
@@ -175,7 +176,6 @@ export default function CinematicBirthdayCard() {
         </motion.div>
       </motion.div>
 
-      {/* Final message */}
       <AnimatePresence>
         {step === 2 && (
           <motion.div
@@ -219,7 +219,6 @@ export default function CinematicBirthdayCard() {
         )}
       </AnimatePresence>
 
-      {/* Floating Hearts */}
       {showHearts && (
         <div style={heartsContainerStyle}>
           {[...Array(20)].map((_, i) => (
