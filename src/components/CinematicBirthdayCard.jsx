@@ -11,12 +11,27 @@ export default function CinematicBirthdayCard() {
   const rotateX = useTransform(progress, [0, 100], [0, 180])
   const borderRadius = useTransform(progress, [0, 30, 100], [16, 8, 16])
 
+  // Background music with tab visibility control
   useEffect(() => {
     const audio = new Audio('/audio/first-date-frad.mp3')
     audio.loop = true
     audio.volume = 0.3
-    audio.play()
-    return () => audio.pause()
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause()
+      } else {
+        audio.play()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    audio.play().catch(() => {})
+
+    return () => {
+      audio.pause()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
   const confettiColors = ['rgba(255,255,255,0.9)', 'rgba(220,220,220,0.8)', 'rgba(240,240,240,0.7)']
@@ -52,7 +67,7 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={16} />, delay: 0.6 }
   ], [])
 
-  // Full-screen centered container
+  // Centered container style
   const containerStyle = {
     position: 'relative',
     width: '100%',
