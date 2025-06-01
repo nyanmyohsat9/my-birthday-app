@@ -6,4 +6,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['lucide-react', 'framer-motion'],
   },
+  build: {
+    rollupOptions: {
+      external: ['html2canvas'], // 👈 This prevents Rollup from trying to bundle html2canvas
+    },
+  },
 })
