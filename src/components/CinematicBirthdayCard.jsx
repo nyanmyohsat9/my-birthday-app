@@ -55,21 +55,19 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={16} />, delay: 0.6 }
   ]), [])
 
-  // Perfectly centered container
+  // Container style with full-screen centering
   const containerStyle = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    position: 'relative',
     width: '100%',
-    height: '100vh',
+    minHeight: '100vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: '#374151',
-    padding: 0,
     margin: 0,
+    padding: 0,
     overflow: 'hidden',
   }
 
@@ -79,8 +77,8 @@ export default function CinematicBirthdayCard() {
     boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
     border: '1px solid #D1D5DB',
     padding: '24px',
-    maxWidth: '400px',
-    width: '100%',
+    maxWidth: '90vw',
+    width: '400px',
     textAlign: 'center',
     boxSizing: 'border-box',
   }
@@ -113,7 +111,8 @@ export default function CinematicBirthdayCard() {
 
   return (
     <div style={containerStyle}>
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+      {/* Ambient Particles */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         {ambientParticles.map((p, i) => (
           <motion.div
             key={i}
@@ -138,6 +137,7 @@ export default function CinematicBirthdayCard() {
         ))}
       </div>
 
+      {/* Card Flip Animation */}
       <motion.div
         style={{
           rotateX,
@@ -170,19 +170,20 @@ export default function CinematicBirthdayCard() {
           >
             A special message awaits inside...
           </motion.p>
-          <motion.div
+          <motion.button
+            style={buttonStyle}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.9 }}
+            onClick={openCard}
           >
-            <button style={buttonStyle} onClick={openCard}>
-              <Sparkles size={20} />
-              Open Card
-            </button>
-          </motion.div>
+            <Sparkles size={20} />
+            Open Card
+          </motion.button>
         </motion.div>
       </motion.div>
 
+      {/* Birthday Message Slide-In */}
       <AnimatePresence>
         {step === 2 && (
           <motion.div
@@ -192,11 +193,12 @@ export default function CinematicBirthdayCard() {
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
               border: '1px solid #E5E7EB',
               padding: '24px',
-              maxWidth: '400px',
-              width: '100%',
+              maxWidth: '90vw',
+              width: '400px',
               textAlign: 'center',
               color: '#374151',
               zIndex: 1,
+              position: 'relative',
               marginTop: '24px',
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -244,6 +246,7 @@ export default function CinematicBirthdayCard() {
         )}
       </AnimatePresence>
 
+      {/* Floating Hearts/Icons */}
       {showHearts && (
         <div style={heartsContainerStyle}>
           {[...Array(20)].map((_, i) => (
