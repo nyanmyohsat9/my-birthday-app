@@ -218,4 +218,5 @@ export default function CinematicBirthdayCard() {
               <p style={{ fontWeight: '700', fontStyle: 'italic', marginTop: 32, textAlign: 'center' }}>
                 "You make my world more beautiful just by being in it."
               </p>
+              </motion.div>
             </div>
