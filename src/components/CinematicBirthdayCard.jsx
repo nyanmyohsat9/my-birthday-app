@@ -17,9 +17,7 @@ export default function CinematicBirthdayCard() {
     return () => audio.pause()
   }, [])
 
-  const confettiColors = [
-    'rgba(255,255,255,0.9)', 'rgba(220,220,220,0.8)', 'rgba(240,240,240,0.7)'
-  ]
+  const confettiColors = ['rgba(255,255,255,0.9)', 'rgba(220,220,220,0.8)', 'rgba(240,240,240,0.7)']
 
   const openCard = () => {
     if (step > 0) return
@@ -50,30 +48,31 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={16} />, delay: 0.6 }
   ]), [])
 
+  // Styles
   const containerStyle = {
     position: 'relative',
     minHeight: '100vh',
-    backgroundColor: '#fff',
-    overflow: 'hidden',
+    width: '100%',
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 24,
+    padding: '20px',
+    boxSizing: 'border-box',
+    backgroundColor: '#fff',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: '#374151',
   }
 
   const cardStyle = {
     backgroundColor: '#fff',
-    borderRadius: 16,
+    borderRadius: '16px',
     boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
     border: '1px solid #D1D5DB',
-    overflow: 'hidden',
-    padding: 32,
-    maxWidth: 480,
+    padding: '24px',
+    maxWidth: '400px',
     width: '100%',
     textAlign: 'center',
+    boxSizing: 'border-box',
   }
 
   const buttonStyle = {
@@ -81,15 +80,17 @@ export default function CinematicBirthdayCard() {
     border: '1px solid #D1D5DB',
     color: '#374151',
     boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    padding: '16px 32px',
-    borderRadius: 24,
+    padding: '12px 24px',
+    borderRadius: '20px',
     cursor: 'pointer',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: '16px',
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 8,
-    marginTop: 16,
+    gap: '8px',
+    marginTop: '16px',
+    width: '100%',
+    maxWidth: '250px',
   }
 
   const heartsContainerStyle = {
@@ -102,6 +103,7 @@ export default function CinematicBirthdayCard() {
 
   return (
     <div style={containerStyle}>
+      {/* Background particles */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         {ambientParticles.map((p, i) => (
           <motion.div
@@ -127,17 +129,18 @@ export default function CinematicBirthdayCard() {
         ))}
       </div>
 
+      {/* Birthday Card */}
       <motion.div
-        style={{ rotateX, borderRadius: borderRadius.get() + 'px', transformStyle: 'preserve-3d', marginBottom: 24, zIndex: 1 }}
+        style={{ rotateX, borderRadius: borderRadius.get() + 'px', transformStyle: 'preserve-3d', zIndex: 1, width: '100%', maxWidth: '400px' }}
         animate={step === 1 ? { scale: 1.02 } : { scale: 1 }}
         transition={{ type: 'spring', damping: 20 }}
       >
         <motion.div style={cardStyle} animate={{ opacity: step === 2 ? 0 : 1 }}>
-          <div style={{ marginBottom: 24 }}>
+          <div style={{ marginBottom: '20px' }}>
             <Heart size={48} color="#4B5563" />
           </div>
           <motion.h2
-            style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 16, color: '#1F2937' }}
+            style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#1F2937' }}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -145,7 +148,7 @@ export default function CinematicBirthdayCard() {
             For Your 20th Birthday
           </motion.h2>
           <motion.p
-            style={{ color: '#6B7280', marginBottom: 32, maxWidth: 320, margin: '0 auto' }}
+            style={{ color: '#6B7280', marginBottom: '24px' }}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.7 }}
@@ -165,44 +168,43 @@ export default function CinematicBirthdayCard() {
         </motion.div>
       </motion.div>
 
+      {/* Final message */}
       <AnimatePresence>
         {step === 2 && (
           <motion.div
             style={{
               backgroundColor: '#fff',
-              borderRadius: 16,
+              borderRadius: '16px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
               border: '1px solid #E5E7EB',
-              padding: 32,
-              maxWidth: 480,
+              padding: '24px',
+              maxWidth: '400px',
               width: '100%',
               textAlign: 'center',
               color: '#374151',
               zIndex: 1,
+              marginTop: '24px',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <h1 style={{ fontSize: 28, fontWeight: 'bold', color: '#1F2937' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1F2937' }}>
               Happy 20th Birthday!
             </h1>
-            <p style={{ color: '#6B7280', marginTop: 8 }}>To someone truly extraordinary</p>
+            <p style={{ color: '#6B7280', marginTop: '8px' }}>To someone truly extraordinary</p>
 
-            <div style={{ marginTop: 24, fontSize: 18, lineHeight: 1.6 }}>
-              <p style={{ marginBottom: 24, fontWeight: '600', fontStyle: 'italic' }}>
-                My dearest love,
-              </p>
+            <div style={{ marginTop: '20px', fontSize: '16px', lineHeight: '1.6' }}>
               {[
-                "As you turn 20 today, I'm in awe of the incredible woman you've become. Your journey through life has been nothing short of inspiring, and I'm so grateful to be part of it.",
-                "Your smile brightens my darkest days, your laughter is my favorite melody, and your kindness reminds me what truly matters in this world.",
-                "This year will bring new adventures, challenges, and triumphs. Whatever comes your way, know that I'll be there cheering you on every step of the way.",
-                "May your 20th year be filled with joy that sparkles like champagne bubbles, love that wraps around you like a warm embrace, and dreams that take flight like birthday balloons.",
+                "As you turn 20 today, I'm in awe of the incredible woman you've become.",
+                "Your smile brightens my darkest days, your laughter is my favorite melody, and your kindness reminds me what truly matters.",
+                "This year will bring new adventures, challenges, and triumphs. I'll be there cheering you on every step of the way.",
+                "May your 20th year be filled with joy, love, and dreams that take flight like birthday balloons."
               ].map((text, i) => (
-                <p key={i} style={{ marginBottom: 16 }}>{text}</p>
+                <p key={i} style={{ marginBottom: '12px' }}>{text}</p>
               ))}
-              <p style={{ fontWeight: '700', fontStyle: 'italic', marginTop: 32 }}>
+              <p style={{ fontWeight: 'bold', fontStyle: 'italic', marginTop: '16px' }}>
                 "You make my world more beautiful just by being in it."
               </p>
             </div>
@@ -210,6 +212,7 @@ export default function CinematicBirthdayCard() {
         )}
       </AnimatePresence>
 
+      {/* Floating Hearts */}
       {showHearts && (
         <div style={heartsContainerStyle}>
           {[...Array(20)].map((_, i) => (
@@ -248,20 +251,6 @@ export default function CinematicBirthdayCard() {
             </motion.div>
           ))}
         </div>
-      )}
-
-      {step === 2 && (
-        <motion.div
-          style={{ marginTop: 24, textAlign: 'center', color: '#4B5563' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-        >
-          <div style={{ display: 'inline-block', borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
-            <p style={{ fontStyle: 'italic' }}>Forever yours,</p>
-            <p style={{ marginTop: 8, fontWeight: '600' }}>[Your Name]</p>
-          </div>
-        </motion.div>
       )}
     </div>
   )
