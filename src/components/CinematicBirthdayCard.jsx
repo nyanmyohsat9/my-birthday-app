@@ -48,19 +48,19 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={16} />, delay: 0.6 }
   ]), [])
 
-  // Styles
+  // 💫 Center the card perfectly
   const containerStyle = {
     position: 'relative',
-    minHeight: '100vh',
     width: '100%',
+    height: '100vh',
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: '20px',
-    boxSizing: 'border-box',
+    alignItems: 'center',
     backgroundColor: '#fff',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: '#374151',
+    padding: '20px',
+    boxSizing: 'border-box',
   }
 
   const cardStyle = {
@@ -131,7 +131,14 @@ export default function CinematicBirthdayCard() {
 
       {/* Birthday Card */}
       <motion.div
-        style={{ rotateX, borderRadius: borderRadius.get() + 'px', transformStyle: 'preserve-3d', zIndex: 1, width: '100%', maxWidth: '400px' }}
+        style={{
+          rotateX,
+          borderRadius: borderRadius.get() + 'px',
+          transformStyle: 'preserve-3d',
+          zIndex: 1,
+          width: '100%',
+          maxWidth: '400px',
+        }}
         animate={step === 1 ? { scale: 1.02 } : { scale: 1 }}
         transition={{ type: 'spring', damping: 20 }}
       >
