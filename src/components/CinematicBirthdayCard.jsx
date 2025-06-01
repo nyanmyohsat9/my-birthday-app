@@ -1,37 +1,73 @@
-import { Heart, Sparkles } from 'lucide-react'
+import { Heart, Sparkles, Copy, Volume2, VolumeX } from 'lucide-react'
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import confetti from 'canvas-confetti'
 
 export default function CinematicBirthdayCard() {
   const [step, setStep] = useState(0)
   const [showHearts, setShowHearts] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [muted, setMuted] = useState(false)
 
   const progress = useMotionValue(0)
   const rotateX = useTransform(progress, [0, 100], [0, 180])
   const borderRadius = useTransform(progress, [0, 30, 100], [16, 8, 16])
 
-  // Play background music on load
-  useEffect(() => {
-    const audio = new Audio('/audio/first-date-frad.mp3')
-    audio.loop = true
-    audio.volume = 0.3
-    audio.play().catch(() => {
-      // If autoplay is blocked, try playing on first click
-      const playAudio = () => {
-        audio.play()
-        document.removeEventListener('click', playAudio)
-      }
-      document.addEventListener('click', playAudio)
-    })
+  const audioRef = useRef(new Audio('/audio/first-date-frad.mp3'))
 
-    return () => audio.pause()
-  }, [])
+  // Initialize audio
+  useEffect(() => {
+    const audio = audioRef.current
+    audio.loop = true
+    audio.volume = muted ? 0 : 0.3
+
+    return () => {
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [muted])
+
+  const playAudio = () => {
+    const audio = audioRef.current
+    if (!isPlaying) {
+      audio.play().catch(() => {})
+      setIsPlaying(true)
+    }
+  }
+
+  const toggleMute = () => {
+    setMuted(prev => !prev)
+    audioRef.current.volume = muted ? 0.3 : 0
+  }
+
+  const takeScreenshot = () => {
+    import('html2canvas').then(html2canvas => {
+      html2canvas.default(document.body).then(canvas => {
+        const link = document.createElement('a')
+        link.download = 'happy-birthday-card.png'
+        link.href = canvas.toDataURL()
+        link.click()
+      })
+    })
+  }
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    alert("Link copied to clipboard!")
+  }
 
   const confettiColors = ['rgba(255,255,255,0.9)', 'rgba(220,220,220,0.8)', 'rgba(240,240,240,0.7)']
 
   const openCard = () => {
     if (step > 0) return
+    playAudio()
     setStep(1)
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#F87171', '#FBBF24', '#60A5FA'],
+    })
     setTimeout(() => setStep(2), 1000)
     setTimeout(() => setShowHearts(true), 1500)
   }
@@ -53,7 +89,6 @@ export default function CinematicBirthdayCard() {
     { icon: <Sparkles size={20} />, delay: 0.4 },
   ], [])
 
-  // ✅ Centered container style
   const containerStyle = {
     position: 'relative',
     width: '100vw',
@@ -110,7 +145,7 @@ export default function CinematicBirthdayCard() {
 
   return (
     <div style={containerStyle}>
-      {/* Ambient background particles */}
+      {/* Ambient Particles */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         {ambientParticles.map((p, i) => (
           <motion.div
@@ -136,7 +171,7 @@ export default function CinematicBirthdayCard() {
         ))}
       </div>
 
-      {/* Card Flip Animation */}
+      {/* Card Flip Wrapper */}
       <motion.div
         style={{
           rotateX,
@@ -240,6 +275,15 @@ export default function CinematicBirthdayCard() {
               >
                 "You make my world more beautiful just by being in it."
               </motion.p>
+            </div>
+
+            <div style={{ marginTop: '20px', display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button onClick={takeScreenshot} style={buttonStyle}>📸 Save Image</button>
+              <button onClick={copyLink} style={buttonStyle}>🔗 Copy Link</button>
+              <button onClick={toggleMute} style={buttonStyle}>
+                {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                {muted ? 'Unmute' : 'Mute'}
+              </button>
             </div>
           </motion.div>
         )}
